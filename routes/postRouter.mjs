@@ -1,10 +1,11 @@
 import { Router } from "express";
 import pool from "../utils/db.mjs";
 import bodyValidation from "../middlewares/bodyValidation.mjs";
+import protectUser from "../middlewares/protectUser.mjs";
 
 const postsRouter = Router();
 
-postsRouter.post("/", bodyValidation, async (req, res) => {
+postsRouter.post("/", [bodyValidation, protectUser], async (req, res) => {
   try {
     const { title, image, category_id, description, content, status_id } = req.body;
     await pool.query(
@@ -165,7 +166,7 @@ postsRouter.get("/:postId", async (req, res) => {
   }
 });
 
-postsRouter.put("/:postId", bodyValidation, async (req, res) => {
+postsRouter.put("/:postId", [bodyValidation, protectUser], async (req, res) => {
   try {
     const postId = req.params.postId;
     const { title, image, category_id, description, content, status_id } = req.body;
@@ -188,7 +189,7 @@ postsRouter.put("/:postId", bodyValidation, async (req, res) => {
   }
 });
 
-postsRouter.delete("/:postId", async (req, res) => {
+postsRouter.delete("/:postId", [protectUser], async (req, res) => {
   try {
     const postId = req.params.postId;
     const postData = await pool.query("SELECT * FROM posts WHERE id = $1", [postId]);

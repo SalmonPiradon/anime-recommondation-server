@@ -1,7 +1,8 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import postsRouter from "./routes/posts.mjs";
+import postsRouter from "./routes/postRouter.mjs";
+import authRouter from "./routes/authRouter.mjs";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -23,6 +24,7 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/posts", postsRouter);
+app.use("/auth", authRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
